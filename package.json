@@ -1,0 +1,20 @@
+{
+  "name": "sw_api",
+  "version": "1.0.0",
+  "description": "Star Wars Planets",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node-dev  --rs src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Haruki Serikawa",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.14",
+    "@types/node": "^18.11.12",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
