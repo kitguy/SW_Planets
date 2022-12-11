@@ -42,7 +42,7 @@ export class PlanetController extends Controller {
   }
 
   private getAll = async (req: Request, res: Response) => {
-    if (req.query) {
+    if (Object.keys(req.query).length > 0) {
       const resp = await this.planetService.getByQuery(req.query)
       resp ? res.status(200).json(resp) : res.status(404).json(undefined);
     } else {
