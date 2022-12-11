@@ -1,6 +1,7 @@
 import PlanetDTO from '../model/PlanetDTO';
 
 export interface IPlanetRepository {
+  deleteAllPlanets(): Promise<Boolean>;
   exists(id: number): Promise<Boolean>;
   insertPlanet(planet: PlanetDTO);
   deletePlanet(id: number);

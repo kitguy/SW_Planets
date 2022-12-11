@@ -7,6 +7,26 @@ import log from '../util/log';
 export class PlanetService {
   constructor(private readonly planetRepo: IPlanetRepository) { }
 
+  initializeLocalDB = async() => {
+    const planets = (await swapi.planets()).results;
+
+    const insertedPlanets = [];
+    let id = 1;
+    for (let planet of planets) {
+      const films: any[] = await Promise.all(planet.films.map(f => swapi.get(f)));
+      const planetDTO: PlanetDTOWithId = new PlanetDTOWithId(id, planet.name, planet.climate, planet.terrain,
+        films.map(f => new FilmDTO(f.title, f.director, f.release_date)));
+      const planetDoc = await this.planetRepo.insertPlanet(planetDTO);
+      insertedPlanets.push(planetDoc.id);
+      id +=1;
+    }
+    return insertedPlanets.length;
+  }
+
+  deleteAllFromLocalDB = async() => {
+    return await this.planetRepo.deleteAllPlanets()
+  }
+
   deleteById = async(id: string) => {
     const response = await this.planetRepo.deletePlanet(parseInt(id));
     return response.deletedCount === 1;

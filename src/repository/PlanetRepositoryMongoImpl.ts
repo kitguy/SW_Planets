@@ -1,8 +1,13 @@
+import { response } from 'express';
 import FilmDTO from '../model/FilmDTO';
 import PlanetDTO, { PlanetRecord } from '../model/PlanetDTO';
 import { IPlanetRepository } from './IPlanetRepository';
 
 export default class PlanetRepositoryMongoImpl implements IPlanetRepository {
+  async deleteAllPlanets(): Promise<Boolean> {
+    const deleteResponse = await PlanetRecord.remove({});
+    return deleteResponse.deletedCount > 0;
+  }
   async exists(id: number): Promise<Boolean> {
     const response = await PlanetRecord.exists({id: id})
     return response

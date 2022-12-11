@@ -16,7 +16,23 @@ export class PlanetController extends Controller {
     this.router.post(`${this.path}/load/:id`, this.loadAndSaveById);
     this.router.get(`${this.path}`, this.getAll);
     this.router.get(`${this.path}/:id`, this.getById);
+    this.router.delete(`${this.path}/all`, this.deleteAllFromLocalDb);
     this.router.delete(`${this.path}/:id`, this.deleteById);
+    this.router.post(`${this.path}/initialize`, this.initialize);
+  }
+
+  private initialize = async (req: Request, res: Response) => {
+    const inserted = await this.planetService.initializeLocalDB();
+    inserted > 0
+      ? res.status(200).json(`Loaded ${inserted} planets from Open Star Wars API`)
+      : res.status(500).json(`Planets could not be deleted`);
+  }
+
+  private deleteAllFromLocalDb = async (req: Request, res: Response) => {
+    const resp = await this.planetService.deleteAllFromLocalDB();
+    resp
+      ? res.status(200).json('deleted all planets')
+      : res.status(500).json(`Planets could not be deleted`);
   }
 
   private deleteById = async (req: Request, res: Response) => {

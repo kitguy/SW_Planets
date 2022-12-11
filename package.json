@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc; node dist/index.js",
-    "debug": "ts-node-dev  --rs src/index.ts",
+    "debug": "node_modules/.bin/ts-node-dev  --rs src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Haruki Serikawa",

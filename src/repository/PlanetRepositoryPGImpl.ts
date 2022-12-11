@@ -6,6 +6,9 @@ export default class PlanetRepositoryPGImpl implements IPlanetRepository {
 
   // change this any to PG Client when implementing this
   constructor(private readonly postgres: any) { }
+  deleteAllPlanets(): Promise<Boolean> {
+    throw new Error('Method not implemented.');
+  }
 
   exists(id: number): Promise<Boolean> {
     throw new Error('Method not implemented.');
