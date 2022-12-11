@@ -30,7 +30,7 @@ export default class PlanetRepositoryMongoImpl implements IPlanetRepository {
     return planets.map(p => this.mapToPlanetDTO(p));
   }
 
-  mapToPlanetDTO(p: any): PlanetDTO {
+  private mapToPlanetDTO(p: any): PlanetDTO {
     return p
     ? new PlanetDTO(p.name, p.climate, p.terrain, p.films.map(f => new FilmDTO(f.title, f.director, f.release_date)))
     : undefined;
