@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import PlanetDTO from '../model/PlanetDTO';
 import { PlanetService } from '../service/PlanetService';
+import log from '../util/log';
 import { Controller } from './Controller';
 
 export class PlanetController extends Controller {
@@ -11,6 +12,7 @@ export class PlanetController extends Controller {
     ) { super() }
 
   initializeRoutes =  (): void => {
+    log.info(`Initializing routes...`);
     this.router.post(`${this.path}/load/:id`, this.loadAndSaveById);
     this.router.get(`${this.path}`, this.getAll);
     this.router.get(`${this.path}/:id`, this.getById);
@@ -19,6 +21,7 @@ export class PlanetController extends Controller {
 
   private deleteById = async (req: Request, res: Response) => {
     const id = req.params.id;
+    log.info(`Deleting planet by id ${id}`);
     const resp = await this.planetService.deleteById(id);
     resp
       ? res.status(200).json('ok')
@@ -28,6 +31,7 @@ export class PlanetController extends Controller {
   private loadAndSaveById = async (req: Request, res: Response) => {
     const id = req.params.id;
     try {
+      log.info(`Loading planet ${id} from Star wars open API to local DB`);
       const response = await this.planetService.loadAndSaveById(parseInt(id));
       if (response.id) {
         res.status(200).json(`Loaded to DB. Id: ${response.id}`);
@@ -46,6 +50,7 @@ export class PlanetController extends Controller {
       const resp = await this.planetService.getByQuery(req.query)
       resp ? res.status(200).json(resp) : res.status(404).json(undefined);
     } else {
+      log.info(`Fetching all planets from local DB`);
       const resp = await this.planetService.getAll();
       res.status(200).json(resp);
     }
@@ -54,6 +59,7 @@ export class PlanetController extends Controller {
   private getById = async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id);
     const resp = await this.planetService.getById(id);
+    log.info(`Fetching Planet id: ${id} from local db `);
     return resp ? res.status(200).json(resp) : res.status(404).json(resp);
   }
 

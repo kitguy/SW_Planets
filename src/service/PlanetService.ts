@@ -2,6 +2,7 @@ import * as swapi from 'swapi-node';
 import FilmDTO from '../model/FilmDTO';
 import PlanetDTO, { PlanetDTOWithId } from '../model/PlanetDTO';
 import { IPlanetRepository } from '../repository/IPlanetRepository';
+import log from '../util/log';
 
 export class PlanetService {
   constructor(private readonly planetRepo: IPlanetRepository) { }
@@ -34,6 +35,7 @@ export class PlanetService {
 
   getByQuery = async(query): Promise<PlanetDTO[]> => {
     if (query.name) {
+      log.info(`Fetching planet by name ${query.name} from local DB`);
       const planet = await this.planetRepo.getPlanetByName(query.name);
       return planet ? new Array(planet) : undefined;
     } else {
