@@ -32,7 +32,7 @@ export class PlanetController extends Controller {
     const resp = await this.planetService.deleteAllFromLocalDB();
     resp
       ? res.status(200).json('deleted all planets')
-      : res.status(500).json(`Planets could not be deleted`);
+      : res.status(404).json(`No planets were deleted`);
   }
 
   private deleteById = async (req: Request, res: Response) => {
@@ -41,7 +41,7 @@ export class PlanetController extends Controller {
     const resp = await this.planetService.deleteById(id);
     resp
       ? res.status(200).json('ok')
-      : res.status(500).json(`The ${id} Planet could not be deleted`);
+      : res.status(404).json(`The ${id} Planet could not be found`);
   }
 
   private loadAndSaveById = async (req: Request, res: Response) => {
@@ -50,7 +50,7 @@ export class PlanetController extends Controller {
       log.info(`Loading planet ${id} from Star wars open API to local DB`);
       const response = await this.planetService.loadAndSaveById(parseInt(id));
       if (response.id) {
-        res.status(200).json(`Loaded to DB. Id: ${response.id}`);
+        res.status(200).json(`Loaded Planet to Local DB. Id: ${response.id}`);
       }
       return;
     } catch (e) {

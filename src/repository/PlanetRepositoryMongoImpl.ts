@@ -5,7 +5,7 @@ import { IPlanetRepository } from './IPlanetRepository';
 
 export default class PlanetRepositoryMongoImpl implements IPlanetRepository {
   async deleteAllPlanets(): Promise<Boolean> {
-    const deleteResponse = await PlanetRecord.remove({});
+    const deleteResponse = await PlanetRecord.deleteMany({});
     return deleteResponse.deletedCount > 0;
   }
   async exists(id: number): Promise<Boolean> {
