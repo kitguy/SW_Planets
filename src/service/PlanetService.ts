@@ -8,7 +8,7 @@ export class PlanetService {
   constructor(private readonly planetRepo: IPlanetRepository) { }
 
   initializeLocalDB = async() => {
-    const planets = (await swapi.planets()).results;
+    const planets = (await swapi.getPlanets()).results;
 
     const insertedPlanets = [];
     let id = 1;
@@ -44,7 +44,16 @@ export class PlanetService {
     if (await this.planetRepo.exists(id)) {
       throw { message: `Planet with Id ${id} already Exists`, status: 409 };
     } else {
-      const planet = await swapi.planets({ id: id });
+      let planet;
+      try {
+         planet = await swapi.getPlanets({ id: id });
+      } catch (e) {
+        if (e.message === '404') {
+          throw { message: `Planet with Id ${id} does not exist`, status: 404 };
+        } else {
+          throw { message: `Error when fetching plannet with Id ${id}: ${e.message}`, status: 500 };
+        }
+      }
       const films: any[] = await Promise.all(planet.films.map(f => swapi.get(f)));
       const planetDTO = new PlanetDTOWithId(id, planet.name, planet.climate, planet.terrain,
         films.map(f => new FilmDTO(f.title, f.director, f.release_date)))
