@@ -8,19 +8,42 @@ export class PlanetService {
   constructor(private readonly planetRepo: IPlanetRepository) { }
 
   initializeLocalDB = async() => {
-    const planets = (await swapi.getPlanets()).results;
+    const planets = await this.getAllPlanetsFromAPI();
 
-    const insertedPlanets = [];
+    let insertedPlanets = 0;
+    for (let planet of planets) {
+      await this.planetRepo.insertPlanet(planet);
+      insertedPlanets += 1;
+    }
+    return insertedPlanets;
+  }
+
+  private getAllPlanetsFromAPI = async(): Promise<PlanetDTOWithId[]> => {
+    let planetResponse = await swapi.getPlanets();
+    let planets = planetResponse.results;
+    const planetDtoWithId = new Array<PlanetDTOWithId>;
     let id = 1;
     for (let planet of planets) {
       const films: any[] = await Promise.all(planet.films.map(f => swapi.get(f)));
       const planetDTO: PlanetDTOWithId = new PlanetDTOWithId(id, planet.name, planet.climate, planet.terrain,
         films.map(f => new FilmDTO(f.title, f.director, f.release_date)));
-      const planetDoc = await this.planetRepo.insertPlanet(planetDTO);
-      insertedPlanets.push(planetDoc.id);
+      planetDtoWithId.push(planetDTO);
       id +=1;
     }
-    return insertedPlanets.length;
+
+    while (!!planetResponse.next) {
+      planetResponse = await swapi.get(planetResponse.next);
+      let planets = planetResponse.results;
+      for (let planet of planets) {
+        const films: any[] = await Promise.all(planet.films.map(f => swapi.get(f)));
+        const planetDTO: PlanetDTOWithId = new PlanetDTOWithId(id, planet.name, planet.climate, planet.terrain,
+          films.map(f => new FilmDTO(f.title, f.director, f.release_date)));
+        planetDtoWithId.push(planetDTO);
+        id +=1;
+      }
+    }
+
+    return planetDtoWithId;
   }
 
   deleteAllFromLocalDB = async() => {

@@ -23,7 +23,7 @@ describe('PlanetService', () => {
     });
 
     it('calls insert 2 times if star wars api returns 2 records', async () => {
-      getPlanetMock.mockResolvedValue({results: [newPlanet(), newPlanet()]})
+      getPlanetMock.mockResolvedValue({results: [newPlanet(), newPlanet()], next: null})
       getMock.mockResolvedValue(newFilm());
       jest.spyOn(planetRepo, 'insertPlanet').mockResolvedValueOnce({ id: 1 });
       jest.spyOn(planetRepo, 'insertPlanet').mockResolvedValueOnce({ id: 1 });
