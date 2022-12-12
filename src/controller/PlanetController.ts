@@ -1,5 +1,4 @@
 import { Request, Response, Router } from 'express';
-import PlanetDTO from '../model/PlanetDTO';
 import { PlanetService } from '../service/PlanetService';
 import log from '../util/log';
 import { Controller } from './Controller';
