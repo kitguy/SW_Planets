@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsc; node dist/index.js",
     "debug": "node_modules/.bin/ts-node-dev  --rs src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "Haruki Serikawa",
   "license": "ISC",
