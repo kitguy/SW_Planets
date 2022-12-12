@@ -11,7 +11,7 @@ if you are in a debian like operational system:
 You can run it with Docker using this:
 `docker run -d --name test-mongo mongo:4.0.4`
 
-## Set up
+## Setup
 - Install node.js: https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
 
 - Install project dependencies
@@ -148,13 +148,12 @@ Call `DELETE http://localhost:8080/planet/<PLANET_ID>` replacing `PLANET_ID` for
 
 If the Planet was found you'll receive a 200 http status code and a `"ok"` string as body; otherwise you'll receive a 404 http status instead.
 
-
-## Load planet back into the local database
+### Load planet back into the local database
 Call `POST http://localhost:8080/planet/load/<PLANET_ID>` replacing the PLANET_ID for the planet id you want to save into the local database from the Open Star Wars API.
 
 You'll receive a 200 http status code with a message `"Loaded Planet to Local DB. Id: X"` (being X the planet ID) as body.
 
 If you try to call it with an PLANET_ID from a planet already in the local database, you'll receive a 409 (Conflict) http status code and a message `"Planet with Id X already Exists"` as body.
 
-## Delete all planets from the local database
+### Delete all planets from the local database
 Call `DELETE http://localhost:8080/planet/all` and all records will be removed from the local database and you'll receive a 200 http status code. If no records are there to be removed, you'll receive a 404 http status code with a `"No planets were deleted"` string message as body.
