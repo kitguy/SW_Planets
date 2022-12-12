@@ -1,4 +1,3 @@
-import { response } from 'express';
 import FilmDTO from '../model/FilmDTO';
 import PlanetDTO, { PlanetRecord } from '../model/PlanetDTO';
 import { IPlanetRepository } from './IPlanetRepository';
