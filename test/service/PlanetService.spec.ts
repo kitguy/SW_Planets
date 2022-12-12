@@ -94,4 +94,27 @@ describe('PlanetService', () => {
       expect(insertMock).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('getByQuery', () => {
+    it('queries by name if there is a name field params', async() => {
+      const getPlanetByNameMock = jest.spyOn(planetRepo, 'getPlanetByName').mockResolvedValueOnce(newPlanet());
+
+      const planet = await planetService.getByQuery({name: 'Tatooine'});
+
+      expect(getPlanetByNameMock).toHaveBeenCalledWith('Tatooine');
+      expect(planet).toHaveLength(1);
+    });
+
+    it('throws error if query param is different than name', async() => {
+      const getPlanetByNameMock = jest.spyOn(planetRepo, 'getPlanetByName').mockResolvedValueOnce(newPlanet());
+
+      try {
+        await planetService.getByQuery({age: 3});
+        throw new Error('This should not be reached');
+      } catch (e) {
+        expect(e.message).toContain(`Query param not implemented`);
+      }
+      expect(getPlanetByNameMock).not.toHaveBeenCalled();
+    });
+  });
 });
